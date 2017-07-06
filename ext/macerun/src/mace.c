@@ -459,6 +459,7 @@ int MACE_main (int argc, char *argv[]){
   SGRAPH *G=&PP.SG;
   MACEVBM VV;
 
+	ERROR_MES = NULL;
   PROBLEM_init (&PP);
   MACE_read_param (argc, argv, &PP);
 if ( ERROR_MES ) return (1);

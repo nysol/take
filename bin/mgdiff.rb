@@ -8,7 +8,6 @@ require "nysol/mcmd"
 # ver="1.1" # 節点ファイル対応 2014/8/2
 $cmd=$0.sub(/.*\//,"")
 $version="1.1"
-$revision="###VERSION###"
 
 def help
 STDERR.puts <<EOF
@@ -105,8 +104,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

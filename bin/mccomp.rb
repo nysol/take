@@ -8,7 +8,6 @@ require "nysol/mcmd"
 # 1.1 出力のnode項目名をnf=の値にする: 2016/11/11
 $cmd="mccomp2g.rb"
 $version="1.1"
-$revision="###VERSION###"
 
 def help
 
@@ -95,8 +94,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

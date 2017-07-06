@@ -13,7 +13,6 @@ require "set"
 # ver="1.4" # kn2=を追加                2016/09/10
 $cmd=$0.sub(/.*\//,"")
 $version="1.4"
-$revision="###VERSION###"
 
 def help
 STDERR.puts <<EOF
@@ -92,8 +91,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

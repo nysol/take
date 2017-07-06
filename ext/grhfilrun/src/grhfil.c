@@ -154,6 +154,7 @@ int GRHFIL_main (int argc, char *argv[]){
   LONG l, x;
   char i;
   WEIGHT w;
+	ERROR_MES = NULL;
   PROBLEM_init (&PP);
   GRHFIL_read_param (&PP, argc, argv);
 FS->out_node_num = PP.rows;

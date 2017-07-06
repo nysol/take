@@ -11,7 +11,6 @@ require "set"
 # ver="1.2" # 出力nodeファイルの項目名をnf=の値にする 2016/11/11
 $cmd=$0.sub(/.*\//,"")
 $version="1.2"
-$revision="###VERSION###"
 
 def help
 STDERR.puts <<EOF
@@ -127,8 +126,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

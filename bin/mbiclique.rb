@@ -11,7 +11,6 @@ require "nysol/enumLcmIs"
 # ver="1.2" # null値が含まれる場合にmappingテーブルがずれるバグ修正 2015/10/1
 $cmd=File.basename($0)
 $version="1.2"
-$revision="###VERSION###"
 
 def help
 
@@ -127,8 +126,7 @@ EOF
 exit
 end
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

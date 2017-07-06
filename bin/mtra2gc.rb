@@ -10,7 +10,6 @@ require "nysol/take"
 # ver="1.2" # sim=の値を変更 2016/12/13
 $cmd=$0.sub(/.*\//,"")
 $version="1.1"
-$revision="###VERSION###"
 
 def help
 STDERR.puts <<EOF
@@ -146,8 +145,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

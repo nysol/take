@@ -32,7 +32,7 @@ void PROBLEM_error (){
 void PROBLEM_init (PROBLEM *P){
   P->start_time = clock();
   RAND_INIT;
-  ERROR_MES = NULL;
+  //ERROR_MES = NULL;
 
   P->problem = 0;
   P->prog = 0;

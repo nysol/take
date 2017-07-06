@@ -9,7 +9,6 @@ require "nysol/mcmd"
 # 1.2 jac=等追加: 2017/1/10
 # 1.3 ro=追加: 2017/1/15
 $version="1.3"
-$revision="###VERSION###"
 
 def help
 
@@ -126,8 +125,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

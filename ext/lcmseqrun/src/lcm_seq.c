@@ -407,6 +407,7 @@ int LCMseq_main (int argc, char *argv[]){
   LCMSEQ_QUE occ;
   occ.v = NULL;
   
+	ERROR_MES = NULL;
   PROBLEM_init (&PP);
   LCMseq_read_param (argc, argv, &PP);
 if ( ERROR_MES ) return (1);

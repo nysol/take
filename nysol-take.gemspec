@@ -88,6 +88,7 @@ spec = Gem::Specification.new do |s|
 		"mtra2g.rb"
 	]
 	s.require_path = "lib"
+	s.add_dependency "nysol" ,"~> 3.0.0"
 	s.description = <<-EOF
     nysol TAKE tools
 	EOF

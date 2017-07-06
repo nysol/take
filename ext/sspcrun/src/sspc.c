@@ -545,6 +545,7 @@ int SSPC_main (int argc, char *argv[]){
   SETFAMILY *T = &PP.TT.T;
   QUEUE_ID i;
 
+	ERROR_MES = NULL;
   PROBLEM_init (&PP);
   SSPC_read_param (argc, argv, &PP);
 if ( ERROR_MES ) return (1);

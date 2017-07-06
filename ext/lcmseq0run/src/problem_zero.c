@@ -31,7 +31,7 @@ void PROBLEM_error (){
 void PROBLEM_init (PROBLEM *P){
   P->start_time = clock();
   RAND_INIT;
-  ERROR_MES = NULL;
+  //ERROR_MES = NULL;
 
 #ifdef _FILE2_LOAD_FROM_MEMORY_
   __load_from_memory_org2__ = __load_from_memory__ = __load_from_memory_org__;

@@ -10,7 +10,6 @@ require "nysol/take"
 # ver="1.2" # ni=,nf=の追加, eo=,no=の機能をmclique2g.rbに分離, 枝出力を廃止(-nodeによる出力のみ) 2014/8/2
 $cmd=$0.sub(/.*\//,"")
 $version="1.2"
-$revision="###VERSION###"
 
 def help
 STDERR.puts <<EOF
@@ -114,8 +113,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 

@@ -7,7 +7,6 @@ require "nysol/mcmd"
 # ver="1.0" # 初期リリース 2014/7/04
 $cmd=$0.sub(/.*\//,"")
 $version=1.0
-$revision="###VERSION###"
 
 def help
 STDERR.puts <<EOF
@@ -49,8 +48,7 @@ exit
 end
 
 def ver()
-	$revision ="0" if $revision =~ /VERSION/
-	STDERR.puts "version #{$version} revision #{$revision}"
+	STDERR.puts "version #{$version}"
 	exit
 end
 
