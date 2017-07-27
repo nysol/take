@@ -340,7 +340,7 @@ eArgs["nomodel"] = true
 # クラスありパターン列挙
 if clsFN then
 	# ノードはクラス関係なく全体でfrequentな2アイテムセットを求める
-	lcm=TAKE::LcmIs.new(db);
+	lcm=TAKE::LcmIs.new(db,false);
 	eArgs["minLen"] = 1
 	eArgs["maxLen"] = 1
 	if node_support
@@ -371,7 +371,7 @@ if clsFN then
 	eArgs["minSup"] = minSup
 	eArgs["minCnt"] = minCnt
 
-	lcm=TAKE::LcmEp.new(db);
+	lcm=TAKE::LcmEp.new(db,false);
 	lcm.enumerate(eArgs)
 	# system "head #{lcm.pFile}"
 	# class%0nr,pid,pattern,size,pos%2nr,neg,posTotal,negTotal,total,support,growthRate,postProb%1nr
@@ -410,7 +410,7 @@ if clsFN then
 
 # クラスなしパターン列挙
 else
-	lcm=TAKE::LcmIs.new(db);
+	lcm=TAKE::LcmIs.new(db,false);
 	# 1 itemset
 	eArgs["minLen" ] = 1
 	eArgs["maxLen" ] = 1

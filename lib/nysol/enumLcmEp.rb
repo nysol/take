@@ -76,11 +76,12 @@ class LcmEp
 		return pat
 	end
 
-	def initialize(db)
+	def initialize(db,outtf=true)
 		@temp=MCMD::Mtemp.new
 		@db      = db         # 入力データベース
 		@file=@temp.file
 		items=@db.items
+		@outtf = outtf
 
 		# 重みファイルの作成
 		# pos,negのTransactionオブジェクトに対してLCMが扱う整数アイテムによるトランザクションファイルを生成する。
@@ -196,7 +197,6 @@ class LcmEp
 #system("cp #{@file} xxtra_#{cName}")
 #system("cp #{@weightFile[cName]} xxw_#{cName}")
 #system("echo '#{run}' >xxscp_#{cName}")
-
 			# パターンのサポートを計算しCSV出力する
 			MCMD::msgLog("output patterns to CSV file ...")
 			pFiles << @temp.file
@@ -219,28 +219,30 @@ class LcmEp
 			s = MCMD::mrecount("i=#{pFiles.last}") # 列挙されたパターンの数
 			MCMD::msgLog("the number of contrast patterns on class `#{cName}' enumerated is #{s}")
 
-			# トランザクション毎に出現するパターンを書き出す
-			MCMD::msgLog("output tid-patterns ...")
-			tFiles << @temp.file
+			if @outtf then
+				# トランザクション毎に出現するパターンを書き出す
+				MCMD::msgLog("output tid-patterns ...")
+				tFiles << @temp.file
 
-			xxw= tf.file
-			f=""
-			f << "mcut    f=#{@db.idFN}                  i=#{@db.file} |"
-			f << "muniq   k=#{@db.idFN}                  |"
-			f << "mnumber S=0 a=__tid -q                 |"
-			f << "msortf  f=__tid                        o=#{xxw};"
-			system(f)
+				xxw= tf.file
+				f=""
+				f << "mcut    f=#{@db.idFN}                  i=#{@db.file} |"
+				f << "muniq   k=#{@db.idFN}                  |"
+				f << "mnumber S=0 a=__tid -q                 |"
+				f << "msortf  f=__tid                        o=#{xxw};"
+				system(f)
 
-			translt = @temp.file
-			TAKE::run_lcmtrans(lcmout,"t",translt)
+				translt = @temp.file
+				TAKE::run_lcmtrans(lcmout,"t",translt)
 
-			f=""
-			#f << "lcm_trans #{lcmout} t |" #__tid,pid
-			f << "msortf   f=__tid i=#{translt}           |"
-			f << "mjoin    k=__tid m=#{xxw} f=#{@db.idFN} |"
-			f << "msetstr  v=#{cName} a=class             |"
-			f << "mcut     f=#{@db.idFN},class,pid        o=#{tFiles.last}"
-			system(f)
+				f=""
+				#f << "lcm_trans #{lcmout} t |" #__tid,pid
+				f << "msortf   f=__tid i=#{translt}           |"
+				f << "mjoin    k=__tid m=#{xxw} f=#{@db.idFN} |"
+				f << "msetstr  v=#{cName} a=class             |"
+				f << "mcut     f=#{@db.idFN},class,pid        o=#{tFiles.last}"
+				system(f)
+			end
 		}
 
 		# クラス別のパターンとtid-pidファイルを統合して最終出力
@@ -314,16 +316,18 @@ class LcmEp
 		f << "msortf  f=class,pid o=#{xxp4}"
 		system(f)
 
-		# tid-pidファイル計算
-		f=""
-		f << "mcat                                       i=#{tFiles.join(",")} |"
-		f << "msortf  f=class,pid                        |"
-		f << "mjoin   k=class,pid m=#{xxpCat} f=ppid     |" # 全クラス統一pid(ppid)結合
-		f << "msortf  f=class,ppid                       |"
-		f << "mcommon k=class,ppid K=class,pid m=#{xxp4} |" # 列挙されたパターンの選択
-		f << "mcut    f=#{@db.idFN},class,ppid:pid       |"
-		f << "msortf  f=#{@db.idFN},class,pid            o=#{@tFile}"
-		system(f)
+		if @outtf then
+			# tid-pidファイル計算
+			f=""
+			f << "mcat                                       i=#{tFiles.join(",")} |"
+			f << "msortf  f=class,pid                        |"
+			f << "mjoin   k=class,pid m=#{xxpCat} f=ppid     |" # 全クラス統一pid(ppid)結合
+			f << "msortf  f=class,ppid                       |"
+			f << "mcommon k=class,ppid K=class,pid m=#{xxp4} |" # 列挙されたパターンの選択
+			f << "mcut    f=#{@db.idFN},class,ppid:pid       |"
+			f << "msortf  f=#{@db.idFN},class,pid            o=#{@tFile}"
+			system(f)
+		end
 
 		@size = MCMD::mrecount("i=#{@pFile}") # 列挙されたパターンの数
 		MCMD::msgLog("the number of emerging patterns enumerated is #{@size}")
@@ -331,7 +335,7 @@ class LcmEp
 
   def output(outpath)
 		system "mv #{@pFile} #{outpath}/patterns.csv"
-		system "mv #{@tFile} #{outpath}/tid_pats.csv"
+		system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
 	end
 end
 

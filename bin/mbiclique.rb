@@ -229,7 +229,6 @@ pair2tra(ei,ef1,ef2,xxtra,xxmap1,xxmap2)
 
 # 利用コマンドファイル名
 #CMD="lcm_20140215"
-#{TAKE::LcmIs::CMD} 
 
 run=""
 run << "#{type}If"

@@ -13,11 +13,12 @@ module TAKE
 class LcmSeq
 	attr_reader :size  # 列挙されたパターン数
 
-	def initialize(db)
+	def initialize(db,outtf=true)
 		@temp=MCMD::Mtemp.new
 		@db = db # 入力データベース
 		@file=@temp.file
 		items=@db.items
+		@outtf = outtf
 
 		# アイテムをシンボルから番号に変換する。
 		f=""
@@ -107,28 +108,30 @@ class LcmSeq
 		f << "msortf   f=support%nr                                                   o=#{@pFile}"
 		system(f)
 
-		# トランザクション毎に出現するシーケンスを書き出す
-		MCMD::msgLog("output tid-patterns ...")
-		@tFile = @temp.file
+		if @outtf then
+			# トランザクション毎に出現するシーケンスを書き出す
+			MCMD::msgLog("output tid-patterns ...")
+			@tFile = @temp.file
 
-		xxw = tf.file #Mtemp.new.name
-		f=""
-		f << "mcut    f=#{@db.idFN} i=#{@db.file} |"
-		f << "muniq   k=#{@db.idFN}  |"
-		f << "mnumber S=0 a=__tid -q |"
-		f << "msortf  f=__tid       o=#{xxw}"
-		system(f)
+			xxw = tf.file #Mtemp.new.name
+			f=""
+			f << "mcut    f=#{@db.idFN} i=#{@db.file} |"
+			f << "muniq   k=#{@db.idFN}  |"
+			f << "mnumber S=0 a=__tid -q |"
+			f << "msortf  f=__tid       o=#{xxw}"
+			system(f)
 
-		translt = @temp.file
-		TAKE::run_lcmtrans(lcmout,"t",translt)
+			translt = @temp.file
+			TAKE::run_lcmtrans(lcmout,"t",translt)
 
-		f=""
-#		f << "lcm_trans #{lcmout} t |" #__tid,pid
-		f << "msortf   f=__tid i=#{translt}           |"
-		f << "mjoin    k=__tid m=#{xxw} f=#{@db.idFN} |"
-		f << "mcut     f=#{@db.idFN},pid              |"
-		f << "msortf   f=#{@db.idFN},pid              o=#{@tFile}"
-		system(f)
+			f=""
+			#		f << "lcm_trans #{lcmout} t |" #__tid,pid
+			f << "msortf   f=__tid i=#{translt}           |"
+			f << "mjoin    k=__tid m=#{xxw} f=#{@db.idFN} |"
+			f << "mcut     f=#{@db.idFN},pid              |"
+			f << "msortf   f=#{@db.idFN},pid              o=#{@tFile}"
+			system(f)
+		end
 
 		@size = MCMD::mrecount("i=#{@pFile}") # 列挙されたパターンの数
 		MCMD::msgLog("the number of contrast patterns enumerated is #{@size}")
@@ -136,7 +139,7 @@ class LcmSeq
 
   def output(outpath)
 		system "mv #{@pFile} #{outpath}/patterns.csv"
-		system "mv #{@tFile} #{outpath}/tid_pats.csv"
+		system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
 	end
 end
 

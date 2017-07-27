@@ -53,11 +53,12 @@ class LcmIs
 		return pat
 	end
 
-	def initialize(db)
+	def initialize(db,outtf=true)
 		@temp=MCMD::Mtemp.new
 		@db = db # 入力データベース
 		@file=@temp.file
 		items=@db.items
+		@outtf = outtf
 
 		# アイテムをシンボルから番号に変換する。
 		f=""
@@ -95,13 +96,6 @@ class LcmIs
  				@maxCnt = (@maxSup * @db.size.to_f + 0.99).to_i
 			end
 		end
-
-		# lcmのパラメータ設定と実行
-		#run=""
-		#run << "#{CMD} #{@type}If"
-		#run << " -U #{@maxCnt}"         if @maxCnt # windowサイズ上限
-		#run << " -l #{eArgs['minLen']}" if eArgs["minLen"] # パターンサイズ下限
-		#run << " -u #{eArgs['maxLen']}" if eArgs['maxLen'] # パターンサイズ上限
 
 		run=""
 		run << "#{@type}If"
@@ -235,39 +229,41 @@ class LcmIs
 		@size = MCMD::mrecount("i=#{@pFile}") # 列挙されたパターンの数
 		MCMD::msgLog("the number of patterns enumerated is #{@size}")
 
-		# トランザクション毎に出現するシーケンスを書き出す
-		MCMD::msgLog("output tid-patterns ...")
-		@tFile = @temp.file
+		if @outtf then
+			# トランザクション毎に出現するシーケンスを書き出す
+			MCMD::msgLog("output tid-patterns ...")
+			@tFile = @temp.file
 
-		xxw1= tf.file
-		f=""
-		f << "mcut    f=#{@db.idFN} i=#{@db.file} |"
-		f << "muniq   k=#{@db.idFN}  |"
-		f << "mnumber S=0 a=__tid -q |"
-		f << "msortf  f=__tid       o=#{xxw1}"
-		system(f)
+			xxw1= tf.file
+			f=""
+			f << "mcut    f=#{@db.idFN} i=#{@db.file} |"
+			f << "muniq   k=#{@db.idFN}  |"
+			f << "mnumber S=0 a=__tid -q |"
+			f << "msortf  f=__tid       o=#{xxw1}"
+			system(f)
 
-		xxw2= tf.file
-		f=""
-		f << "mcut    f=pid i=#{@pFile} |"
-		f << "msortf  f=pid o=#{xxw2}"
-		system(f)
+			xxw2= tf.file
+			f=""
+			f << "mcut    f=pid i=#{@pFile} |"
+			f << "msortf  f=pid o=#{xxw2}"
+			system(f)
 
-		xxw3 = tf.file
-		TAKE::run_lcmtrans(lcmout,"t",xxw3)
-		f=""
-#		f << "lcm_trans #{lcmout} t |" #__tid,pid
-		f << "msortf   f=pid  i=#{xxw3}                 |"
-		f << "mcommon  k=pid m=#{xxw2}                 |"
-		f << "msortf   f=__tid                         |"
-		f << "mjoin    k=__tid m=#{xxw1} f=#{@db.idFN} |"
-		f << "mcut     f=#{@db.idFN},pid               o=#{@tFile}"
-		system(f)
+			xxw3 = tf.file
+			TAKE::run_lcmtrans(lcmout,"t",xxw3)
+			f=""
+			#f << "lcm_trans #{lcmout} t |" #__tid,pid
+			f << "msortf   f=pid  i=#{xxw3}                 |"
+			f << "mcommon  k=pid m=#{xxw2}                 |"
+			f << "msortf   f=__tid                         |"
+			f << "mjoin    k=__tid m=#{xxw1} f=#{@db.idFN} |"
+			f << "mcut     f=#{@db.idFN},pid               o=#{@tFile}"
+			system(f)
+		end
 	end
 
   def output(outpath)
 		system "mv #{@pFile} #{outpath}/patterns.csv"
-		system "mv #{@tFile} #{outpath}/tid_pats.csv"
+		system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
 	end
 end
 
