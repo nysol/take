@@ -5,12 +5,13 @@
 #include <sys/stat.h>
 #include <string>
 #include <ruby.h>
+// sspc Core
+namespace{
 #include "src/sspc.c"
+}
 #include <kgMethod.h>
 
-extern "C" {
-	void Init_sspcrun(void);
-}
+
 
 VALUE sspcrun(VALUE self,VALUE argvV){
 
@@ -40,6 +41,10 @@ VALUE sspcrun(VALUE self,VALUE argvV){
 	return Qtrue;
 }
 
+
+extern "C" {
+	void Init_sspcrun(void);
+}
 
 // -----------------------------------------------------------------------------
 // ruby Mcsvin クラス init

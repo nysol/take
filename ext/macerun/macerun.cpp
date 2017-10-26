@@ -6,8 +6,9 @@
 #include <string>
 #include <ruby.h>
 
+namespace {
 #include "src/mace.c"
-
+}
 
 #include <kgMethod.h>
 

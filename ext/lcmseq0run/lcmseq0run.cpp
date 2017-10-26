@@ -5,9 +5,9 @@
 #include <sys/stat.h>
 #include <string>
 #include <ruby.h>
-
+namespace {
 #include "src/lcm_seq_zero.c"
-
+}
 
 #include <kgMethod.h>
 

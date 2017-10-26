@@ -4,7 +4,7 @@ require "rubygems"
 
 spec = Gem::Specification.new do |s|
   s.name="nysol-take"
-  s.version="3.0.0"
+  s.version="3.0.1"
   s.author="NYSOL"
   s.email="info@nysol.jp"
   s.homepage="http://www.nysol.jp/"
