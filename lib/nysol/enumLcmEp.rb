@@ -166,11 +166,10 @@ class LcmEp
 				if eArgs["maxSup"].class.name=="Hash"
 					@maxPos = (eArgs["maxSup"][cName] * posSize.to_f + 0.99).to_i
 				else
-					p posSize
 					@maxPos = (eArgs["maxSup"] * posSize.to_f + 0.99).to_i
 				end
 			else
-				@maxPos = posSize.to_f
+				@maxPos = nil
 			end
 
 			@sigma[cName] = calSigma(@minPos,@minGR,posSize,negSize)
@@ -183,7 +182,8 @@ class LcmEp
 
 			run=""
 			run << "#{eArgs["type"]}IA"
-			run << " -U #{@maxCnt}"         if @maxCnt # windowサイズ上限
+			run << " -U #{@maxPos}"         if @maxPos # windowサイズ上限
+			#もともと ^^ @maxCntだったがどこにも設定されていないかかったので@maxPosにしとく問題有れば変更
 			run << " -l #{eArgs['minLen']}" if eArgs["minLen"] # パターンサイズ下限
 			run << " -u #{eArgs['maxLen']}" if eArgs['maxLen'] # パターンサイズ上限
 			run << " -w #{@weightFile[cName]} #{@file} #{@sigma[cName]} #{lcmout}"
