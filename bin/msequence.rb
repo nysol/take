@@ -74,7 +74,7 @@ end
 
 help() if ARGV.size <= 0 or ARGV[0]=="--help"
 ver() if ARGV[0]=="--version"
-args=MCMD::Margs.new(ARGV,"i=,c=,x=,O=,tid=,time=,item=,class=,taxo=,s=,S=,sx=,Sx=,g=,p=,-uniform,l=,u=,top=,gap=,win=,-padding,T=,-mcmdenv")
+args=MCMD::Margs.new(ARGV,"i=,c=,x=,O=,tid=,time=,item=,class=,taxo=,s=,S=,sx=,Sx=,g=,p=,-uniform,l=,u=,top=,gap=,win=,-padding,T=,-mcmdenv,-m,-c")
 
 # lcm_seqコマンド実行可能確認
 #exit(1) unless(MCMD::chkCmdExe(TAKE::LcmSeq::CMD      , "executable"))
@@ -120,6 +120,13 @@ eArgs["gap"    ] = args.  int("gap=" ,nil  ,0,nil  ) # gap長上限限
 eArgs["win"    ] = args.  int("win=" ,nil  ,0,nil  ) # win size上限限
 eArgs["padding"] = args. bool("-padding") # 0item ommit
 eArgs["top"    ] = args.  int("top=" ,nil,0)
+eArgs["exM"] = args. bool("-m") # extension maximal patterns only
+eArgs["exC"] = args. bool("-c") # extension closed patterns only
+
+
+if eArgs["exM"] and eArgs["exC"] then
+	raise "-m cannot be specified with -c"
+end
 
 if eArgs["minLen"] and eArgs["maxLen"]
 	if eArgs["minLen"] > eArgs["maxLen"] then

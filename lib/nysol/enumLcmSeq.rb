@@ -65,6 +65,12 @@ class LcmSeq
 			File.open(xxtop,"r"){|fpr| @minCnt=fpr.gets().to_i}
 			@minCnt=1 if @minCnt<0
 		end
+		
+		@addTP = ""		
+		@addTP = "m" if eArgs["exM"]
+		@addTP = "c" if eArgs["exC"]
+			
+
 
 		# lcm_seq出力ファイル
 		lcmout = tf.file
@@ -73,7 +79,7 @@ class LcmSeq
 		system("touch #{lcmout}")
 
 		# lcm_seqのパラメータ設定と実行
-		run="CIf"
+		run="CIf#{@addTP}"
 		run << " -U #{@maxCnt}"         if @maxCnt # windowサイズ上限
 		run << " -l #{eArgs['minLen']}" if eArgs["minLen"] # パターンサイズ下限
 		run << " -u #{eArgs['maxLen']}" if eArgs['maxLen'] # パターンサイズ上限

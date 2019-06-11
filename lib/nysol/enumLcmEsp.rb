@@ -150,6 +150,10 @@ class LcmEsp
  					@maxCnt = (eArgs["maxSup"] * posSize.to_f + 0.99).to_i
 				end
 			end
+			@addTP = ""		
+			@addTP = "m" if eArgs["exM"]
+			@addTP = "c" if eArgs["exC"]
+
 
 			@sigma[cName] = calSigma(@minPos,@minGR,posSize,negSize)
 
@@ -159,7 +163,7 @@ class LcmEsp
 			# そのときのために空ファイルを生成しておいく。
 			system("touch #{lcmout}")
 
-			run="CIA"
+			run="CIA#{@addTP}"
 			run << " -U #{@maxCnt}"         if @maxCnt # windowサイズ上限
 			run << " -l #{eArgs['minLen']}" if eArgs["minLen"] # パターンサイズ下限
 			run << " -u #{eArgs['maxLen']}" if eArgs['maxLen'] # パターンサイズ上限
