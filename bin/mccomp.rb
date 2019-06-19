@@ -6,7 +6,7 @@ require "nysol/mcmd"
 
 # 1.0 initial development: 2016/10/17
 # 1.1 出力のnode項目名をnf=の値にする: 2016/11/11
-$cmd="mccomp2g.rb"
+$cmd="mccomp.rb"
 $version="1.1"
 
 def help
