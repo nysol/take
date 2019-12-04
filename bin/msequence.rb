@@ -74,7 +74,7 @@ end
 
 help() if ARGV.size <= 0 or ARGV[0]=="--help"
 ver() if ARGV[0]=="--version"
-args=MCMD::Margs.new(ARGV,"i=,c=,x=,O=,tid=,time=,item=,class=,taxo=,s=,S=,sx=,Sx=,g=,p=,-uniform,l=,u=,top=,gap=,win=,-padding,T=,-mcmdenv,-m,-c")
+args=MCMD::Margs.new(ARGV,"i=,c=,x=,O=,tid=,time=,item=,class=,taxo=,s=,S=,sx=,Sx=,g=,p=,-uniform,l=,u=,top=,gap=,win=,-padding,T=,-mcmdenv,-m,-c,-q")
 
 # lcm_seqコマンド実行可能確認
 #exit(1) unless(MCMD::chkCmdExe(TAKE::LcmSeq::CMD      , "executable"))
@@ -105,6 +105,9 @@ timeFN = timeFN["names"].join(",") if timeFN
 itemFN = itemFN["names"].join(",") if itemFN
 clsFN  = clsFN["names"].join(",")  if clsFN
 taxoFN = taxoFN["names"].join(",") if taxoFN
+
+sortInfo =  args.bool("-q") 
+
 
 eArgs=Hash.new
 eArgs["minSup" ] = args.float("s="   ,0.05 ,0,1    ) # 最小サポート
@@ -163,7 +166,7 @@ end
 
 # 出力
 system("mkdir -p #{outPath}")
-lcm.output(outPath)
+lcm.output(outPath,sortInfo)
 
 MCMD::msgLog("The final results are in the directory `#{outPath}'")
 

@@ -75,7 +75,7 @@ end
 help() if ARGV.size <= 0 or ARGV[0]=="--help"
 ver() if ARGV[0]=="--version"
 
-args=MCMD::Margs.new(ARGV,"i=,x=,O=,tid=,item=,class=,taxo=,type=,s=,S=,sx=,Sx=,g=,p=,-uniform,l=,u=,top=,T=,-replaceTaxo")
+args=MCMD::Margs.new(ARGV,"i=,x=,O=,tid=,item=,class=,taxo=,type=,s=,S=,sx=,Sx=,g=,p=,-uniform,l=,u=,top=,T=,-replaceTaxo,-q")
 
 # コマンド実行可能確認
 #exit(1) unless(MCMD::chkCmdExe(TAKE::LcmIs::CMD      , "executable"))
@@ -104,6 +104,8 @@ idFN   = idFN["names"].join(",")   if idFN
 itemFN = itemFN["names"].join(",") if itemFN
 clsFN  = clsFN["names"].join(",")  if clsFN
 taxoFN = taxoFN["names"].join(",") if taxoFN
+
+sortInfo = args.bool("-q") 
 
 eArgs=Hash.new
 eArgs["type"   ] = args.  str("type=","F" )
@@ -160,7 +162,7 @@ end
 
 # 出力
 system("mkdir -p #{outPath}")
-lcm.output(outPath)
+lcm.output(outPath,sortInfo)
 
 MCMD::msgLog("The final results are in the directory `#{outPath}'")
 

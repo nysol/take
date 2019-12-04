@@ -261,9 +261,14 @@ class LcmIs
 		end
 	end
 
-  def output(outpath)
-		system "mv #{@pFile} #{outpath}/patterns.csv"
-		system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
+  def output(outpath,rmsinfo)
+  	if rmsinfo then
+			system "mfldnmae i=#{@pFile} -q o=#{outpath}/patterns.csv"
+			system "mfldnmae i=#{@tFile} -q o=#{outpath}/tid_pats.csv" if @outtf
+		else
+			system "mv #{@pFile} #{outpath}/patterns.csv"
+			system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
+		end
 	end
 end
 

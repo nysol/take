@@ -29,7 +29,7 @@ class LcmEp
 	def calSigma(minPos,minGR,posCnt,negCnt)
 		omegaF=@@intMax.to_f/posCnt.to_f
 		beta=minPos
-		w=posCnt.to_f/negCnt.to_f
+		w=negCnt.to_f/posCnt.to_f
 #puts "omegaF=#{omegaF}"
 #puts "minPos=#{minPos}"
 #puts "beta=#{beta}"
@@ -179,6 +179,10 @@ class LcmEp
 			# 頻出パターンがなかった場合、lcm出力ファイルが生成されないので
 			# そのときのために空ファイルを生成しておいく。
 			system("touch #{lcmout}")
+
+			if @maxPos then
+				@maxPos = calSigma(@maxPos,@minGR,posSize,negSize)
+			end
 
 			run=""
 			run << "#{eArgs["type"]}IA"
@@ -333,9 +337,16 @@ class LcmEp
 		MCMD::msgLog("the number of emerging patterns enumerated is #{@size}")
 	end
 
-  def output(outpath)
-		system "mv #{@pFile} #{outpath}/patterns.csv"
-		system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
+  def output(outpath,rmsinfo)
+  	if rmsinfo then
+			system "mfldname i=#{@pFile} -q o=#{outpath}/patterns.csv"
+			system "mfldname i=#{@tFile} -q o=#{outpath}/tid_pats.csv" if @outtf
+		else
+			system "mv #{@pFile} #{outpath}/patterns.csv"
+			system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
+		end
+
+
 	end
 end
 

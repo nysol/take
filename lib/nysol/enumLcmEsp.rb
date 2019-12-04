@@ -162,6 +162,10 @@ class LcmEsp
 			# 頻出パターンがなかった場合、lcm出力ファイルが生成されないので
 			# そのときのために空ファイルを生成しておいく。
 			system("touch #{lcmout}")
+			
+			if @maxCnt then
+				@maxCnt = calSigma(@maxCnt,@minGR,posSize,negSize)
+			end
 
 			run="CIA#{@addTP}"
 			run << " -U #{@maxCnt}"         if @maxCnt # windowサイズ上限
@@ -282,9 +286,15 @@ class LcmEsp
 		MCMD::msgLog("the number of emerging sequence patterns enumerated is #{@size}")
 	end
 
-  def output(outpath)
-		system "mv #{@pFile} #{outpath}/patterns.csv"
-		system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
+  def output(outpath,rmsinfo)
+  	if rmsinfo then
+			system "mfldname i=#{@pFile} -q o=#{outpath}/patterns.csv"
+			system "mfldname i=#{@tFile} -q o=#{outpath}/tid_pats.csv" if @outtf
+		else
+			system "mv #{@pFile} #{outpath}/patterns.csv"
+			system "mv #{@tFile} #{outpath}/tid_pats.csv" if @outtf
+		end
+
 	end
 end
 
